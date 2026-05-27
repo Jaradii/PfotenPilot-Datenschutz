@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PfotenPilot</title>
+  <meta name="description" content="PfotenPilot hilft dir, den Alltag mit deinem Tier übersichtlich zu organisieren. Gassi, Futter, Gewicht, Logbuch und Cloud-Synchronisierung an einem Ort." />
+
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --card: rgba(255, 255, 255, 0.82);
+      --text: #1f1f1f;
+      --muted: #66615a;
+      --accent: #8b5e3c;
+      --accent-dark: #6f472a;
+      --border: rgba(120, 90, 60, 0.18);
+      --shadow: 0 18px 45px rgba(60, 40, 25, 0.12);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(190, 145, 90, 0.25), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(120, 85, 55, 0.18), transparent 32%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    header {
+      width: 100%;
+      padding: 28px 20px;
+    }
+
+    .nav {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #b78352, #704729);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 1.35rem;
+      box-shadow: 0 10px 24px rgba(111, 71, 42, 0.24);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-dark);
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 64px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+      padding: 44px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(139, 94, 60, 0.1);
+      color: var(--accent-dark);
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.3rem, 6vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+    }
+
+    .lead {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 1.12rem;
+      max-width: 620px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 18px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-weight: 750;
+      border: 1px solid transparent;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(111, 71, 42, 0.24);
+    }
+
+    .button.primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.55);
+      color: var(--accent-dark);
+      border-color: var(--border);
+    }
+
+    .phone-card {
+      background: linear-gradient(160deg, #2b221c, #6f472a);
+      border-radius: 34px;
+      padding: 14px;
+      min-height: 420px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 26px 50px rgba(70, 45, 28, 0.25);
+    }
+
+    .phone-screen {
+      height: 100%;
+      min-height: 392px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.25), transparent 35%),
+        linear-gradient(180deg, #fff8ef, #ead9c3);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .screen-title {
+      font-weight: 850;
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
+      color: #2c2119;
+    }
+
+    .screen-card {
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(120, 90, 60, 0.16);
+      border-radius: 18px;
+      padding: 14px;
+      color: #2c2119;
+      box-shadow: 0 8px 18px rgba(60, 40, 25, 0.08);
+    }
+
+    .screen-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .screen-card span {
+      color: #75675d;
+      font-size: 0.92rem;
+    }
+
+    section {
+      margin-top: 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 10px 30px rgba(60, 40, 25, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .card h2,
+    .card h3 {
+      margin-top: 0;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .privacy {
+      white-space: normal;
+    }
+
+    .privacy h2 {
+      margin-bottom: 12px;
+    }
+
+    .privacy h3 {
+      margin-top: 22px;
+      margin-bottom: 8px;
+    }
+
+    .privacy p {
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    footer {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 28px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .phone-card {
+        min-height: 320px;
+      }
+
+      .phone-screen {
+        min-height: 292px;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #171411;
+        --card: rgba(38, 32, 27, 0.82);
+        --text: #f6efe7;
+        --muted: #c2b6aa;
+        --accent: #c08a58;
+        --accent-dark: #e0b080;
+        --border: rgba(255, 255, 255, 0.12);
+        --shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
+      }
+
+      .button.secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f0d5bb;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">🐾</div>
+        <span>PfotenPilot</span>
+      </div>
+
+      <nav class="nav-links" aria-label="Navigation">
+        <a href="#funktionen">Funktionen</a>
+        <a href="#datenschutz">Datenschutz</a>
+        <a href="#support">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="badge">🐶 Für den Alltag mit deinem Tier</div>
+        <h1>PfotenPilot</h1>
+        <p class="lead">
+          PfotenPilot hilft dir, Gassi, Futter, Gewicht, Notizen und wichtige Routinen deines Tieres übersichtlich an einem Ort zu organisieren.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="#" aria-label="PfotenPilot im App Store öffnen">
+            Bald im App Store
+          </a>
+          <a class="button secondary" href="#datenschutz">
+            Datenschutz ansehen
+          </a>
+        </div>
+      </div>
+
+      <div class="phone-card" aria-hidden="true">
+        <div class="phone-screen">
+          <div class="screen-title">Heute</div>
+
+          <div class="screen-card">
+            <strong>Gassi</strong>
+            <span>Letzter Spaziergang dokumentiert</span>
+          </div>
+
+          <div class="screen-card">
+            <strong>Futter</strong>
+            <span>Einträge und Routinen im Blick</span>
+          </div>
+
+          <div class="screen-card">
+            <strong>Gewicht</strong>
+            <span>Entwicklung nachvollziehbar festhalten</span>
+          </div>
+
+          <div class="screen-card">
+            <strong>Cloud-Synchronisierung</strong>
+            <span>Verschlüsselte Daten auf mehreren Geräten</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="funktionen">
+      <div class="grid">
+        <div class="card">
+          <h3>Gassi & Logbuch</h3>
+          <p>
+            Halte Spaziergänge und wichtige Ereignisse fest und finde sie später übersichtlich im Logbuch wieder.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Futter & Routinen</h3>
+          <p>
+            Dokumentiere Fütterungen, Notizen und wiederkehrende Aufgaben rund um dein Tier.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Gewicht & Profil</h3>
+          <p>
+            Speichere Tierdaten und Gewichtseinträge, damit wichtige Informationen schnell griffbereit sind.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="datenschutz">
+      <div class="card privacy">
+        <h2>Datenschutzerklärung</h2>
+        <p><strong>Stand: Mai 2026</strong></p>
+
+        <p>
+          Diese Datenschutzerklärung erklärt, welche Daten bei der Nutzung der App PfotenPilot verarbeitet werden.
+        </p>
+
+        <h3>1. Verantwortlicher</h3>
+        <p>
+          Verantwortlich für die App ist:
+        </p>
+        <p>
+          <strong>[Dein Name / Unternehmen]</strong><br />
+          <strong>[Deine E-Mail-Adresse]</strong>
+        </p>
+
+        <h3>2. Zweck der App</h3>
+        <p>
+          PfotenPilot hilft dabei, den Alltag mit einem Tier zu organisieren. In der App können zum Beispiel Tierprofile,
+          Gassi-Einträge, Gewicht, Futter, Notizen und weitere Informationen gespeichert werden.
+        </p>
+
+        <h3>3. Speicherung der Daten</h3>
+        <p>
+          Die in PfotenPilot eingegebenen Daten werden auf dem Gerät verarbeitet.
+        </p>
+        <p>
+          Wenn die Cloud-Synchronisierung aktiviert ist, werden die Daten zusätzlich über Firebase synchronisiert.
+          Dabei werden die Inhalte vor der Übertragung auf dem Gerät verschlüsselt. Das bedeutet:
+          Die gespeicherten Inhalte liegen in Firebase nur verschlüsselt vor und können von uns nicht gelesen werden.
+        </p>
+
+        <h3>4. Cloud-Synchronisierung mit Firebase</h3>
+        <p>
+          Für die Cloud-Synchronisierung nutzt PfotenPilot Firebase, einen Dienst von Google.
+          Firebase wird verwendet, damit verschlüsselte App-Daten zwischen Geräten synchronisiert werden können.
+          Dabei können technische Daten verarbeitet werden, zum Beispiel eine Nutzerkennung, Geräteinformationen
+          oder Synchronisierungszeitpunkte.
+        </p>
+
+        <h3>5. Keine Weitergabe zu Werbezwecken</h3>
+        <p>
+          PfotenPilot verkauft keine personenbezogenen Daten. Die App verwendet keine personalisierte Werbung und
+          kein App-übergreifendes Tracking.
+        </p>
+
+        <h3>6. Keine Auswertung der Inhalte</h3>
+        <p>
+          Die in PfotenPilot gespeicherten Inhalte werden nicht ausgewertet, nicht gelesen und nicht für Werbung
+          oder Analysezwecke verwendet.
+        </p>
+
+        <h3>7. Berechtigungen</h3>
+        <p>
+          PfotenPilot kann bestimmte Berechtigungen anfragen, wenn sie für einzelne Funktionen benötigt werden.
+          Dazu können Benachrichtigungen, Standort oder Fotos gehören. Diese Berechtigungen können jederzeit
+          in den iOS-Einstellungen geändert werden.
+        </p>
+
+        <h3>8. Löschung von Daten</h3>
+        <p>
+          Daten können innerhalb der App gelöscht werden, soweit die entsprechende Funktion vorhanden ist.
+          Wenn die Cloud-Synchronisierung genutzt wird und alle Cloud-Daten gelöscht werden sollen, kann eine Anfrage
+          an die oben genannte E-Mail-Adresse gesendet werden.
+        </p>
+
+        <h3>9. Rechte der Nutzer</h3>
+        <p>
+          Nutzerinnen und Nutzer haben nach der Datenschutz-Grundverordnung insbesondere das Recht auf Auskunft,
+          Berichtigung, Löschung und Einschränkung der Verarbeitung. Anfragen können an die oben genannte
+          E-Mail-Adresse gesendet werden.
+        </p>
+
+        <h3>10. Änderungen</h3>
+        <p>
+          Diese Datenschutzerklärung kann angepasst werden, wenn sich Funktionen der App oder rechtliche Anforderungen ändern.
+        </p>
+      </div>
+    </section>
+
+    <section id="support">
+      <div class="card">
+        <h2>Support</h2>
+        <p>
+          Bei Fragen zu PfotenPilot, zur Cloud-Synchronisierung oder zur Löschung von Daten erreichst du uns unter:
+        </p>
+        <p>
+          <strong><a href="mailto:DEINE-EMAIL@BEISPIEL.DE">DEINE-EMAIL@BEISPIEL.DE</a></strong>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 PfotenPilot. Alle Rechte vorbehalten.
+  </footer>
+</body>
+</html>
